@@ -180,6 +180,181 @@ p solution('abbc', 'bb')#  == 1
 
 use scan : string.scan(substring).size
 
+=begin # 4
+
+https://www.codewars.com/kata/59d9ff9f7905dfeed50000b0)
+7 kyu
+
+Alphabet symmetry
+Consider the word "abode". We can see that the letter a is in position 1 and b is in position 2. In the alphabet, a and b are also in positions 1 and 2. Notice also that d and e in abode occupy the positions they would occupy in the alphabet,
+which are positions 4 and 5. Given an array of words, return an array of the number of letters that occupy their positions in the alphabet for each word. For example,
+
+solve(["abode","ABc","xyzD"]) = [4, 3, 1]
+
+Input will consist of alphabet characters, both uppercase and lowercase. No spaces.
+
+=begin pedac
+
+*************Problem********************
+Overall goal: count the number of letters that are in the same position that they are in the alphabet
+initial input: array of string or strings
+overall output: array of integers/integers are the count
+
+explicit requirements:
+only alphabetical chars, both upper and lower cases
+count uppercase as lowercase, A == a same count
+
+
+implicit requirements:
+output array has same length as input array(3 string => 3 elements)
+questions:
+
+**********Examples/Test cases************
+p solve(["abode","ABc","xyzD"]) == [4,3,1]
+=> 4 chars in the correct position => 4, 3 in the correct position => 3, 1 in the correct position => 1
+p solve(["abide","ABc","xyz"]) == [4,3,0]
+if nothing correct position => 0
+p solve(["IAMDEFANDJKL","thedefgh","xyzDEFghijabc"])== [6,5,7]
+
+p solve(["encode","abc","xyzD","ABmD"]) == [1, 3, 1, 3]
+
+
+
+*************Data Structure**************
+array > array
+
+***************Algorithm*****************
+1. initialize alphabet array [a,b,c..], array[0] == a, arary[1]==b
+details: ('a..'z').to_a
+2.string 'abide' string[0] == a, string [1] == b
+details:
+3.iterate over array 'abide' using map
+details:downcase string, initialize count = 0
+4. iterate over string using each char with index a b i d e
+details: if char == alphabet array[index], count += 1
+5. return count
+details:
+6.
+details:
+=end
+
+def solve(array)
+  alphabet = ('a'..'z').to_a
+  array.map do |word|
+    count = 0
+    word.downcase.each_char.with_index do |char, index| 
+      count += 1 if char == alphabet[index]
+    end
+    count
+  end
+end
+
+
+p solve(["abode","ABc","xyzD"]) == [4,3,1]
+p solve(["abide","ABc","xyz"]) == [4,3,0]
+p solve(["IAMDEFANDJKL","thedefgh","xyzDEFghijabc"])== [6,5,7]
+p solve(["encode","abc","xyzD","ABmD"]) == [1, 3, 1, 3]
+
+def solve(string)
+  vowel_substrings = []
+  (0...string.size).each do |start_index|
+    (start_index...string.size).each do |end_index|
+      vowel_substrings << string[start_index..end_index]
+      end 
+  end
+  vowels = 'aeiou'
+  new_array= vowel_substrings.select do |word|
+        word.each_char.all? do |char|
+          vowels.include?(char)
+        end
+      end
+  new_array.sort_by {|word| word.length}[-1].size
+end
+
+# Amy solution
+
+def substrings(string)
+  (0...string.size).each_with_object([]) do |st_idx, sub_array|
+    (st_idx...string.size).each do |end_idx|
+      sub_array << string[st_idx..end_idx] if string[st_idx..end_idx].chars.all? {|char| char.match?(/[aeiou]/)}
+    end
+  end
+end
+
+def solve(string) # helper method
+  substrings(string).max_by {|substring| substring.size}.size# invoked on return value from substring method
+end
+
+p solve("codewarriors") == 2
+p solve("suoidea") == 3
+p solve("iuuvgheaae") == 4
+p solve("ultrarevolutionariees") == 3
+p solve("strengthlessnesses") == 1
+p solve("cuboideonavicuare") == 2
+p solve("chrononhotonthuooaos") == 5
+p solve("iiihoovaeaaaoougjyaw") == 8
+=begin # 7
+spot study session 9/8/22 with Mohammed. 
+focused on pedac prep for 109 inteerview
+
+
+Complete the function that takes an array of words.
+
+You must concatenate the nth letter from each word to construct a new word which should be returned as a string, 
+where n is the position of the word in the list.
+
+For example:
+
+["yoda", "best", "has"]  -->  "yes"
+  ^        ^        ^
+  n=0     n=1     n=2
+Note: Test cases contain valid input only - i.e. a string array or an empty array; 
+and each word will have enough letters.
+
+
+p nth_char(['yoda', 'best', 'has']) == 'yes'
+p nth_char([]) == ''
+p nth_char(['X-ray']) == 'X'
+p nth_char(['No', 'No']) == 'No'
+p nth_char(['Chad', 'Morocco', 'India', 'Algeria', 'Botswana', 'Bahamas', 'Ecuador', 'Micronesia']) ==  'Codewars
+
+Problem  - given an array of strings, return a single string that contains as many characters as the array has elements.
+
+
+The array element index dictates the string index of the character to collect.
+Rules:
+If the array is empty - the return string is empty 
+
+input: an array of string elements
+Array of strings ['yoda', 'best', 'has']
+first element as a string 
+first character
+first character - > a string object or maybe an array to be truned into a string
+output: A string object - single word 
+
+Algorithm:
+intiate an array for results
+Identify the array index location 
+  Iterate over each word with the index 
+  Identify and collect the string character with the same index.
+  Add that to the results.
+
+return the results
+
+=end 
+
+def nth_char(array)
+  results = ''r
+  array.each_with_index do |word, ind|
+    results << word[ind]
+  end
+  results 
+end
+p nth_char(['yoda', 'best', 'has']) == 'yes'
+p nth_char([]) == ''
+p nth_char(['X-ray']) == 'X'
+p nth_char(['No', 'No']) == 'Nom
+p nth_char(['Chad', 'Morocco', 'India', 'Algeria', 'Botswana', 'Bahamas', 'Ecuador', 'Micronesia']) ==  'Codewars'
 
 =begin # 9
 #9.Typoglycemia Generator
